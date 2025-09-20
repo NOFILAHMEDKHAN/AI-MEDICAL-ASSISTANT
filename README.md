@@ -162,6 +162,7 @@ Push and open a Pull Request
 This project is open-source under the MIT License.
 ```
 ### 👨‍💻 Author
-```
-Developed by NOFIL AHMED KHAN
-📧 Email: [nofil2012@gmail.com]
+
+Developed by **NOFIL AHMED KHAN**  
+📧 Email: [nofil2012@gmail.com](mailto:nofil2012@gmail.com)  
+🔗 LinkedIn: [khannofil](https://www.linkedin.com/in/khannofil
