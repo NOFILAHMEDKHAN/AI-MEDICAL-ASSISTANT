@@ -145,7 +145,7 @@ Using verified APIs (e.g., health databases, Google Maps API)
 
 📑 Export results as PDF medical reports
 ```
-###🤝 Contributing
+### 🤝 Contributing
 ```
 Contributions are welcome!
 
@@ -157,11 +157,11 @@ Commit your changes
 
 Push and open a Pull Request
 ```
-###📜 License
+### 📜 License
 ```
 This project is open-source under the MIT License.
 ```
-###👨‍💻 Author
+### 👨‍💻 Author
 ```
 Developed by NOFIL AHMED KHAN
 📧 Email: nofil2012@gmail.com
