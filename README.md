@@ -65,33 +65,40 @@ Copy code
 ```bash
 git clone https://github.com/yourusername/AI-MedAssist.git
 cd AI-MedAssist
-2. Create Virtual Environment (Recommended)
-bash
+```
+###2. Create Virtual Environment (Recommended)
+```bash
 Copy code
 python -m venv venv
 venv\Scripts\activate      # On Windows
 source venv/bin/activate   # On Mac/Linux
-3. Install Dependencies
-bash
+```
+###3. Install Dependencies
+```bash
 Copy code
 pip install -r requirements.txt
 If requirements.txt is not available, install manually:
-
-bash
+```
+```bash
 Copy code
 pip install Flask numpy pandas scikit-learn googlesearch-python
-4. Add Datasets
+```
+###4. Add Datasets
+```
 Place Training.csv and Testing.csv inside the dataset/ folder.
-
-5. Run the App
-bash
+```
+###5. Run the App
+```bash
 Copy code
 python app.py
-6. Access Locally
+```
+###6. Access Locally
+```
 Open in your browser:
 👉 http://127.0.0.1:5000
-
-📊 How It Works
+```
+###📊 How It Works
+```
 User selects up to 5 symptoms from dropdown menus.
 
 System validates inputs (no duplicates or contradictions).
@@ -111,8 +118,9 @@ Relevant specialists are suggested for the predicted disease.
 Real doctor links are fetched live using Google search integration.
 
 Results are displayed in a modern Bootstrap dashboard.
-
-🔐 Notes & Limitations
+```
+###🔐 Notes & Limitations
+```
 ❌ This project is not a replacement for professional medical advice. Always consult a licensed doctor.
 
 🌍 Doctor results may vary by location, time, and availability (Google search dependent).
@@ -122,8 +130,9 @@ Results are displayed in a modern Bootstrap dashboard.
 Adding geolocation-based searches
 
 Using verified APIs (e.g., health databases, Google Maps API)
-
-📌 Future Improvements
+```
+###📌 Future Improvements
+```
 🔑 Add user authentication & personal health history tracking
 
 📊 Enhance UI with interactive charts & graphs for confidence visualization
@@ -135,8 +144,9 @@ Using verified APIs (e.g., health databases, Google Maps API)
 🔗 Integrate with trusted medical APIs (WebMD, Mayo Clinic, etc.)
 
 📑 Export results as PDF medical reports
-
-🤝 Contributing
+```
+###🤝 Contributing
+```
 Contributions are welcome!
 
 Fork the repository
@@ -146,11 +156,12 @@ Create a new feature branch (feature-new)
 Commit your changes
 
 Push and open a Pull Request
-
-📜 License
+```
+###📜 License
+```
 This project is open-source under the MIT License.
-
-👨‍💻 Author
-Developed by Your Name
-📧 Email: your.email@example.com
-🌐 GitHub: your-username
+```
+###👨‍💻 Author
+```
+Developed by NOFIL AHMED KHAN
+📧 Email: nofil2012@gmail.com
