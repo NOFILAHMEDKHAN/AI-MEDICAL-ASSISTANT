@@ -165,4 +165,4 @@ This project is open-source under the MIT License.
 
 Developed by **NOFIL AHMED KHAN**  
 📧 Email: [nofil2012@gmail.com](mailto:nofil2012@gmail.com)  
-🔗 LinkedIn: [khannofil](https://www.linkedin.com/in/khannofil
+🔗 LinkedIn: (https://www.linkedin.com/in/khannofil)
