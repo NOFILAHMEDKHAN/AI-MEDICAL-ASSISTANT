@@ -164,4 +164,4 @@ This project is open-source under the MIT License.
 ### 👨‍💻 Author
 ```
 Developed by NOFIL AHMED KHAN
-📧 Email: nofil2012@gmail.com
+📧 Email: [nofil2012@gmail.com]
