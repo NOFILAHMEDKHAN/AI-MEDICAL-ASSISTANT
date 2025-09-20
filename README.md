@@ -66,14 +66,14 @@ Copy code
 git clone https://github.com/yourusername/AI-MedAssist.git
 cd AI-MedAssist
 ```
-###2. Create Virtual Environment (Recommended)
+### 2. Create Virtual Environment (Recommended)
 ```bash
 Copy code
 python -m venv venv
 venv\Scripts\activate      # On Windows
 source venv/bin/activate   # On Mac/Linux
 ```
-###3. Install Dependencies
+### 3. Install Dependencies
 ```bash
 Copy code
 pip install -r requirements.txt
@@ -83,21 +83,21 @@ If requirements.txt is not available, install manually:
 Copy code
 pip install Flask numpy pandas scikit-learn googlesearch-python
 ```
-###4. Add Datasets
+### 4. Add Datasets
 ```
 Place Training.csv and Testing.csv inside the dataset/ folder.
 ```
-###5. Run the App
+### 5. Run the App
 ```bash
 Copy code
 python app.py
 ```
-###6. Access Locally
+### 6. Access Locally
 ```
 Open in your browser:
 👉 http://127.0.0.1:5000
 ```
-###📊 How It Works
+### 📊 How It Works
 ```
 User selects up to 5 symptoms from dropdown menus.
 
@@ -119,7 +119,7 @@ Real doctor links are fetched live using Google search integration.
 
 Results are displayed in a modern Bootstrap dashboard.
 ```
-###🔐 Notes & Limitations
+### 🔐 Notes & Limitations
 ```
 ❌ This project is not a replacement for professional medical advice. Always consult a licensed doctor.
 
@@ -131,7 +131,7 @@ Adding geolocation-based searches
 
 Using verified APIs (e.g., health databases, Google Maps API)
 ```
-###📌 Future Improvements
+### 📌 Future Improvements
 ```
 🔑 Add user authentication & personal health history tracking
 
