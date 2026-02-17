@@ -1,0 +1,772 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <title>College Doctor — Symptom Checker</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f0f4f8;
+      --surface: #ffffff;
+      --primary: #0a3d62;
+      --accent: #00b4d8;
+      --accent2: #48cae4;
+      --success: #06d6a0;
+      --danger: #ef233c;
+      --text: #1a1a2e;
+      --muted: #6b7a8d;
+      --border: #dde3ec;
+      --card-shadow: 0 4px 24px rgba(10, 61, 98, 0.10);
+      --radius: 16px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding-top: 80px;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2.5rem;
+      height: 68px;
+      box-shadow: 0 2px 20px rgba(10,61,98,0.18);
+    }
+
+    .nav-brand {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.4rem;
+      color: #fff;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-brand .pulse-dot {
+      width: 10px; height: 10px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.4); }
+    }
+
+    .nav-tag {
+      background: rgba(0, 180, 216, 0.2);
+      color: var(--accent2);
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 4px 12px;
+      border-radius: 20px;
+      border: 1px solid rgba(0,180,216,0.3);
+      letter-spacing: 0.5px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, var(--primary) 0%, #1b4f72 60%, #0e6688 100%);
+      color: #fff;
+      padding: 3.5rem 2.5rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 320px; height: 320px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,180,216,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: 10%;
+      width: 240px; height: 240px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(72,202,228,0.10) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      max-width: 720px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 0.75rem;
+    }
+
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+      letter-spacing: -1px;
+    }
+
+    .hero p {
+      color: rgba(255,255,255,0.72);
+      font-size: 1.05rem;
+      font-weight: 300;
+      max-width: 520px;
+      line-height: 1.7;
+    }
+
+    /* ── MAIN CONTAINER ── */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+
+    /* ── ALERTS ── */
+    .alert {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 1rem 1.25rem;
+      border-radius: 12px;
+      font-size: 0.92rem;
+      margin-bottom: 1.5rem;
+      animation: slideDown 0.3s ease;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .alert-danger {
+      background: #fff0f2;
+      border: 1px solid #ffc2c9;
+      color: #c0152a;
+    }
+
+    .alert-info {
+      background: #e8f8fc;
+      border: 1px solid #b3e8f5;
+      color: #0a6b87;
+    }
+
+    .alert-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+
+    .alert-close {
+      margin-left: auto;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: inherit;
+      opacity: 0.5;
+      font-size: 1rem;
+      padding: 0;
+    }
+    .alert-close:hover { opacity: 1; }
+
+    /* ── SELECTED SYMPTOMS TAGS ── */
+    .selected-symptoms {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.1rem 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .selected-symptoms h6 {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
+    }
+
+    .symptom-tag {
+      display: inline-block;
+      background: linear-gradient(135deg, #e8f4fd, #d0ecf8);
+      color: var(--primary);
+      padding: 0.3em 0.85em;
+      margin: 0.2em;
+      border-radius: 20px;
+      font-size: 0.82em;
+      font-weight: 500;
+      border: 1px solid #b3d9ef;
+    }
+
+    /* ── FORM CARD ── */
+    .form-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--card-shadow);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .form-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .form-card-header h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    /* ── COUNTER BADGE ── */
+    .counter-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+      background: #fff3f5;
+      color: var(--danger);
+      border: 1px solid #ffd0d6;
+    }
+
+    .counter-badge.ok {
+      background: #e8fdf5;
+      color: #028a5b;
+      border-color: #a3e9d0;
+    }
+
+    .counter-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    /* ── SYMPTOM GRID ── */
+    .symptom-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .symptom-select-wrap {
+      position: relative;
+    }
+
+    .symptom-label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .symptom-select {
+      width: 100%;
+      padding: 0.7rem 2.2rem 0.7rem 1rem;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text);
+      background: #f8fafc url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7a8d' d='M6 8L1 3h10z'/%3E%3C/svg%3E") no-repeat right 12px center;
+      appearance: none;
+      -webkit-appearance: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+
+    .symptom-select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0, 180, 216, 0.12);
+      background-color: #fff;
+    }
+
+    .symptom-select.has-value {
+      border-color: var(--accent);
+      background-color: #f0fbfe;
+      color: var(--primary);
+      font-weight: 500;
+    }
+
+    /* ── BUTTONS ── */
+    .btn-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-predict {
+      background: linear-gradient(135deg, var(--primary), #1565a0);
+      color: #fff;
+      border: none;
+      padding: 0.85rem 2.2rem;
+      border-radius: 10px;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(10,61,98,0.25);
+    }
+
+    .btn-predict:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(10,61,98,0.35);
+    }
+
+    .btn-predict:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-clear {
+      background: transparent;
+      color: var(--muted);
+      border: 1.5px solid var(--border);
+      padding: 0.85rem 1.6rem;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-clear:hover {
+      border-color: var(--muted);
+      color: var(--text);
+    }
+
+    /* ── RESULTS SECTION ── */
+    .results-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 1.5rem;
+    }
+
+    .results-header h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .results-header .line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── PREDICTION CARDS ── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .pred-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--card-shadow);
+      overflow: hidden;
+      transition: transform 0.25s, box-shadow 0.25s;
+      border: 1px solid var(--border);
+      animation: fadeUp 0.4s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .pred-card:nth-child(2) { animation-delay: 0.08s; }
+    .pred-card:nth-child(3) { animation-delay: 0.16s; }
+
+    .pred-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 36px rgba(10,61,98,0.14);
+    }
+
+    .pred-card-top {
+      background: linear-gradient(135deg, var(--primary) 0%, #1565a0 100%);
+      padding: 1.4rem 1.5rem 1.2rem;
+      color: #fff;
+    }
+
+    .model-name {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 0.4rem;
+    }
+
+    .disease-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 0.75rem;
+    }
+
+    .confidence-bar-wrap {
+      background: rgba(255,255,255,0.15);
+      border-radius: 20px;
+      height: 6px;
+      overflow: hidden;
+    }
+
+    .confidence-bar {
+      height: 100%;
+      border-radius: 20px;
+      background: linear-gradient(90deg, var(--accent2), var(--success));
+      transition: width 1s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    .confidence-label {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.7);
+      margin-top: 6px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .confidence-label strong { color: #fff; }
+
+    .pred-card-body {
+      padding: 1.25rem 1.5rem;
+    }
+
+    .specialists-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.85rem;
+    }
+
+    .doctor-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0.65rem 0.9rem;
+      border-radius: 10px;
+      background: #f5f8fc;
+      border: 1px solid var(--border);
+      text-decoration: none;
+      color: var(--primary);
+      font-size: 0.88rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      transition: all 0.2s;
+    }
+
+    .doctor-link:hover {
+      background: #e8f4fd;
+      border-color: #b3d9ef;
+      transform: translateX(3px);
+    }
+
+    .doctor-link-icon {
+      width: 30px; height: 30px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .doctor-link-icon svg { color: #fff; }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      text-align: center;
+      padding: 3.5rem 2rem;
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1.5px dashed var(--border);
+    }
+
+    .empty-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .empty-state h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .empty-state p {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      nav { padding: 0 1.2rem; }
+      .hero { padding: 2.5rem 1.2rem 3rem; }
+      .form-card { padding: 1.25rem; }
+      .symptom-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <a class="nav-brand" href="#">
+      <span class="pulse-dot"></span>
+      College Doctor
+    </a>
+    <span class="nav-tag">AI Symptom Checker</span>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-eyebrow">Medical Assistant</div>
+      <h1>Predict Your Condition<br>Find the Right Specialist</h1>
+      <p>Select 3 to 5 symptoms and our AI models will analyze your condition and recommend the right specialist in Pakistan.</p>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="container">
+
+    <!-- Error Alert -->
+    {% if error_message %}
+    <div class="alert alert-danger" id="errorAlert">
+      <span class="alert-icon">⚠️</span>
+      <span>{{ error_message }}</span>
+      <button class="alert-close" onclick="document.getElementById('errorAlert').remove()">✕</button>
+    </div>
+    {% endif %}
+
+    <!-- Selected Symptoms -->
+    {% if selected_symptoms %}
+    <div class="selected-symptoms">
+      <h6>Selected Symptoms</h6>
+      {% for symptom in selected_symptoms %}
+        <span class="symptom-tag">{{ symptom.replace('_', ' ').capitalize() }}</span>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Form Card -->
+    <div class="form-card">
+      <div class="form-card-header">
+        <h2>Select 3 to 5 Symptoms</h2>
+        <div class="counter-badge" id="counterBadge">
+          <span class="counter-dot"></span>
+          <span id="counterText">0 selected</span>
+        </div>
+      </div>
+
+      <form method="post" id="symptomForm">
+        <div class="symptom-grid">
+          {% for i in range(1,6) %}
+          <div class="symptom-select-wrap">
+            <label class="symptom-label" for="symptom{{i}}">Symptom {{i}}</label>
+            <select class="symptom-select" id="symptom{{i}}" name="symptom{{i}}">
+              <option value="">Choose symptom...</option>
+              {% for s in symptoms %}
+              <option value="{{s}}"
+                {% if selected_symptoms and selected_symptoms|length >= i and selected_symptoms[i-1] == s %}selected{% endif %}>
+                {{s.replace('_',' ').capitalize()}}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+          {% endfor %}
+        </div>
+
+        <div class="btn-row">
+          <button type="submit" class="btn-predict" id="predictBtn" disabled>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+              <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zM1 8a7 7 0 1 1 14 0A7 7 0 0 1 1 8z"/>
+            </svg>
+            Predict Disease
+          </button>
+          {% if selected_symptoms %}
+          <a href="/" class="btn-clear">✕ Clear</a>
+          {% endif %}
+        </div>
+      </form>
+    </div>
+
+    <!-- Results -->
+    {% if enhanced %}
+    <div class="results-header">
+      <h2>Predictions</h2>
+      <div class="line"></div>
+    </div>
+    <div class="cards-grid">
+      {% for model, info in enhanced.items() %}
+      <div class="pred-card">
+        <div class="pred-card-top">
+          <div class="model-name">{{ model }}</div>
+          <div class="disease-name">{{ info.disease.capitalize() }}</div>
+          <div class="confidence-bar-wrap">
+            <div class="confidence-bar" style="width: {{ info.confidence }}%"></div>
+          </div>
+          <div class="confidence-label">
+            <span>Confidence</span>
+            <strong>{{ info.confidence }}%</strong>
+          </div>
+        </div>
+        <div class="pred-card-body">
+          <div class="specialists-title">Recommended Specialists</div>
+          {% if info.doctors %}
+            {% for doc in info.doctors %}
+            <a href="{{ doc.url }}" target="_blank" class="doctor-link">
+              <div class="doctor-link-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M4.715 6.542 3.343 7.914a3 3 0 1 0 4.243 4.243l1.828-1.829A3 3 0 0 0 8.586 5.5L8 6.086a1 1 0 0 0-.154.199 2 2 0 0 1 .861 3.337L6.88 11.45a2 2 0 1 1-2.83-2.83l.793-.792a4 4 0 0 1-.128-1.287z"/>
+                  <path d="M6.586 4.672A3 3 0 0 0 7.414 9.5l.775-.776a2 2 0 0 1-.896-3.346L9.12 3.55a2 2 0 1 1 2.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 1 0-4.243-4.243z"/>
+                </svg>
+              </div>
+              {{ doc.title }}
+            </a>
+            {% endfor %}
+          {% else %}
+            <p style="color:var(--muted); font-size:0.88rem;">No specialists found.</p>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    {% else %}
+    <div class="empty-state">
+      <span class="empty-icon">🩺</span>
+      <h3>No Predictions Yet</h3>
+      <p>Select 3 to 5 symptoms above and click Predict Disease to see results.</p>
+    </div>
+    {% endif %}
+
+  </div>
+
+  <script>
+    const selects = document.querySelectorAll('select[name^="symptom"]');
+    const counterBadge = document.getElementById('counterBadge');
+    const counterText = document.getElementById('counterText');
+    const predictBtn = document.getElementById('predictBtn');
+
+    function countSelected() {
+      return Array.from(selects).filter(s => s.value !== '').length;
+    }
+
+    function updateUI() {
+      const count = countSelected();
+
+      // Update counter
+      counterText.textContent = count === 0
+        ? '0 selected — need at least 3'
+        : count < 3
+          ? `${count} selected — need ${3 - count} more`
+          : `${count} selected ✓`;
+
+      counterBadge.className = count >= 3 ? 'counter-badge ok' : 'counter-badge';
+      predictBtn.disabled = count < 3;
+
+      // Highlight filled selects
+      selects.forEach(s => {
+        s.className = s.value ? 'symptom-select has-value' : 'symptom-select';
+      });
+    }
+
+    function refreshDisabled() {
+      // Re-enable everything
+      selects.forEach(s => {
+        Array.from(s.options).forEach(o => o.disabled = false);
+      });
+      // Disable duplicates
+      selects.forEach(s => {
+        if (!s.value) return;
+        selects.forEach(other => {
+          if (other !== s) {
+            Array.from(other.options).forEach(o => {
+              if (o.value && o.value === s.value) o.disabled = true;
+            });
+          }
+        });
+      });
+    }
+
+    selects.forEach(s => {
+      s.addEventListener('change', () => {
+        refreshDisabled();
+        updateUI();
+      });
+    });
+
+    // Form submit guard
+    document.getElementById('symptomForm').addEventListener('submit', function(e) {
+      if (countSelected() < 3) {
+        e.preventDefault();
+        alert('Please select at least 3 symptoms for an accurate prediction.');
+      }
+    });
+
+    // Init
+    refreshDisabled();
+    updateUI();
+  </script>
+</body>
+</html>
